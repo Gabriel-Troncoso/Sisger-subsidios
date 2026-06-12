@@ -5,6 +5,9 @@
 			"referenceName": "ls_sql_dw_subsidios",
 			"type": "LinkedServiceReference"
 		},
+		"folder": {
+			"name": "conexiones"
+		},
 		"annotations": [],
 		"type": "AzureSqlTable",
 		"schema": [
