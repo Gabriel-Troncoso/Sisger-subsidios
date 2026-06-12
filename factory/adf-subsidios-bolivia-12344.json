@@ -1,0 +1,10 @@
+{
+	"name": "adf-subsidios-bolivia-12344",
+	"properties": {
+		"trustModeClaimForMi": {
+			"value": "Disabled",
+			"editable": true
+		}
+	},
+	"location": "brazilsouth"
+}
