@@ -13,7 +13,7 @@
 				},
 				{
 					"dataset": {
-						"referenceName": "bjaControlesPediatricos",
+						"referenceName": "DelimitedText2",
 						"type": "DatasetReference"
 					},
 					"name": "bjaControlesPediatricos"
@@ -57,7 +57,7 @@
 				},
 				{
 					"dataset": {
-						"referenceName": "BjaControlePediatricosSQL",
+						"referenceName": "bjaControlesPediatricos_SQL",
 						"type": "DatasetReference"
 					},
 					"name": "sink3"
@@ -201,9 +201,7 @@
 				"          nro_control as string,",
 				"          fecha_control as string,",
 				"          peso_nino_kg as string,",
-				"          talla_nino_cm as string,",
-				"          estado as string,",
-				"          observaciones as string",
+				"          talla_nino_cm as string",
 				"     ),",
 				"     deletable:false,",
 				"     insertable:true,",
