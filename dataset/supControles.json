@@ -1,20 +1,17 @@
 {
-	"name": "BjaPartos",
+	"name": "supControles",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_storage_subsidios",
 			"type": "LinkedServiceReference"
-		},
-		"folder": {
-			"name": "datos bja"
 		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "bja_partos.csv",
-				"folderPath": "bono_juana_azurduy",
+				"fileName": "controles.csv",
+				"folderPath": "subsidio_universal_prenatal",
 				"fileSystem": "raw"
 			},
 			"columnDelimiter": ",",
@@ -24,15 +21,11 @@
 		},
 		"schema": [
 			{
-				"name": "parto_id",
+				"name": "control_id",
 				"type": "String"
 			},
 			{
-				"name": "ci_madre",
-				"type": "String"
-			},
-			{
-				"name": "ci_recien_nacido",
+				"name": "ci_beneficiaria",
 				"type": "String"
 			},
 			{
@@ -40,19 +33,23 @@
 				"type": "String"
 			},
 			{
-				"name": "fecha_parto",
+				"name": "nro_control",
 				"type": "String"
 			},
 			{
-				"name": "tipo_parto",
+				"name": "fecha_control",
 				"type": "String"
 			},
 			{
-				"name": "peso_nacimiento_kg",
+				"name": "semana_gestacion",
 				"type": "String"
 			},
 			{
-				"name": "talla_nacimiento_cm",
+				"name": "peso_madre_kg",
+				"type": "String"
+			},
+			{
+				"name": "presion_arterial",
 				"type": "String"
 			}
 		]

@@ -5,6 +5,9 @@
 			"referenceName": "ls_sql_dw_subsidios",
 			"type": "LinkedServiceReference"
 		},
+		"folder": {
+			"name": "datos bja"
+		},
 		"annotations": [],
 		"type": "AzureSqlTable",
 		"schema": [

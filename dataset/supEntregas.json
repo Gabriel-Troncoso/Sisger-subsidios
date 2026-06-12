@@ -1,20 +1,17 @@
 {
-	"name": "BjaPartos",
+	"name": "supEntregas",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_storage_subsidios",
 			"type": "LinkedServiceReference"
-		},
-		"folder": {
-			"name": "datos bja"
 		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "bja_partos.csv",
-				"folderPath": "bono_juana_azurduy",
+				"fileName": "entregas.csv",
+				"folderPath": "subsidio_universal_prenatal",
 				"fileSystem": "raw"
 			},
 			"columnDelimiter": ",",
@@ -24,15 +21,15 @@
 		},
 		"schema": [
 			{
-				"name": "parto_id",
+				"name": "entrega_id",
 				"type": "String"
 			},
 			{
-				"name": "ci_madre",
+				"name": "boleta_id",
 				"type": "String"
 			},
 			{
-				"name": "ci_recien_nacido",
+				"name": "ci_beneficiaria",
 				"type": "String"
 			},
 			{
@@ -40,19 +37,27 @@
 				"type": "String"
 			},
 			{
-				"name": "fecha_parto",
+				"name": "paquete_id",
 				"type": "String"
 			},
 			{
-				"name": "tipo_parto",
+				"name": "paquete_nombre",
 				"type": "String"
 			},
 			{
-				"name": "peso_nacimiento_kg",
+				"name": "fecha_entrega",
 				"type": "String"
 			},
 			{
-				"name": "talla_nacimiento_cm",
+				"name": "lote_produccion",
+				"type": "String"
+			},
+			{
+				"name": "peso_paquete_kg",
+				"type": "String"
+			},
+			{
+				"name": "fecha_proxima_entrega",
 				"type": "String"
 			}
 		]

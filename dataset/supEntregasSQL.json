@@ -1,26 +1,23 @@
 {
-	"name": "bjaControlesPediatricos_SQL",
+	"name": "supEntregasSQL",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_sql_dw_subsidios",
 			"type": "LinkedServiceReference"
 		},
-		"folder": {
-			"name": "datos bja"
-		},
 		"annotations": [],
 		"type": "AzureSqlTable",
 		"schema": [
 			{
-				"name": "control_pediatrico_id",
+				"name": "entrega_id",
 				"type": "varchar"
 			},
 			{
-				"name": "ci_nino",
+				"name": "boleta_id",
 				"type": "varchar"
 			},
 			{
-				"name": "ci_madre",
+				"name": "ci_beneficiaria",
 				"type": "varchar"
 			},
 			{
@@ -28,25 +25,33 @@
 				"type": "varchar"
 			},
 			{
-				"name": "nro_control",
+				"name": "paquete_id",
 				"type": "varchar"
 			},
 			{
-				"name": "fecha_control",
+				"name": "paquete_nombre",
 				"type": "varchar"
 			},
 			{
-				"name": "peso_nino_kg",
+				"name": "fecha_entrega",
 				"type": "varchar"
 			},
 			{
-				"name": "talla_nino_cm",
+				"name": "lote_produccion",
+				"type": "varchar"
+			},
+			{
+				"name": "peso_paquete_kg",
+				"type": "varchar"
+			},
+			{
+				"name": "fecha_proxima_entrega",
 				"type": "varchar"
 			}
 		],
 		"typeProperties": {
 			"schema": "bronze",
-			"table": "bja_controles_pediatricos"
+			"table": "sup_entregas"
 		}
 	}
 }

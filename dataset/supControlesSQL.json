@@ -1,26 +1,19 @@
 {
-	"name": "bjaControlesPediatricos_SQL",
+	"name": "supControlesSQL",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_sql_dw_subsidios",
 			"type": "LinkedServiceReference"
 		},
-		"folder": {
-			"name": "datos bja"
-		},
 		"annotations": [],
 		"type": "AzureSqlTable",
 		"schema": [
 			{
-				"name": "control_pediatrico_id",
+				"name": "control_id",
 				"type": "varchar"
 			},
 			{
-				"name": "ci_nino",
-				"type": "varchar"
-			},
-			{
-				"name": "ci_madre",
+				"name": "ci_beneficiaria",
 				"type": "varchar"
 			},
 			{
@@ -36,17 +29,21 @@
 				"type": "varchar"
 			},
 			{
-				"name": "peso_nino_kg",
+				"name": "semana_gestacion",
 				"type": "varchar"
 			},
 			{
-				"name": "talla_nino_cm",
+				"name": "peso_madre_kg",
+				"type": "varchar"
+			},
+			{
+				"name": "presion_arterial",
 				"type": "varchar"
 			}
 		],
 		"typeProperties": {
 			"schema": "bronze",
-			"table": "bja_controles_pediatricos"
+			"table": "sup_controles"
 		}
 	}
 }

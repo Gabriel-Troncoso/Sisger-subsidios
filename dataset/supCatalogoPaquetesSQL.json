@@ -1,52 +1,37 @@
 {
-	"name": "bjaPagosSql",
+	"name": "supCatalogoPaquetesSQL",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_sql_dw_subsidios",
 			"type": "LinkedServiceReference"
 		},
-		"folder": {
-			"name": "datos bja"
-		},
 		"annotations": [],
 		"type": "AzureSqlTable",
 		"schema": [
 			{
-				"name": "pago_id",
+				"name": "paquete_id",
 				"type": "varchar"
 			},
 			{
-				"name": "ci_beneficiaria",
+				"name": "nombre",
 				"type": "varchar"
 			},
 			{
-				"name": "concepto_pago",
+				"name": "contenido",
 				"type": "varchar"
 			},
 			{
-				"name": "monto_bs",
+				"name": "peso_estandar_kg",
 				"type": "varchar"
 			},
 			{
-				"name": "fecha_pago",
-				"type": "varchar"
-			},
-			{
-				"name": "estado_pago",
-				"type": "varchar"
-			},
-			{
-				"name": "canal_pago",
-				"type": "varchar"
-			},
-			{
-				"name": "nro_comprobante",
+				"name": "costo_estimado_bs",
 				"type": "varchar"
 			}
 		],
 		"typeProperties": {
 			"schema": "bronze",
-			"table": "bja_pagos"
+			"table": "sup_catalogo_paquetes"
 		}
 	}
 }

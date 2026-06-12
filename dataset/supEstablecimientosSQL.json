@@ -1,52 +1,53 @@
 {
-	"name": "bjaControlesPediatricos_SQL",
+	"name": "supEstablecimientosSQL",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_sql_dw_subsidios",
 			"type": "LinkedServiceReference"
 		},
-		"folder": {
-			"name": "datos bja"
-		},
 		"annotations": [],
 		"type": "AzureSqlTable",
 		"schema": [
-			{
-				"name": "control_pediatrico_id",
-				"type": "varchar"
-			},
-			{
-				"name": "ci_nino",
-				"type": "varchar"
-			},
-			{
-				"name": "ci_madre",
-				"type": "varchar"
-			},
 			{
 				"name": "establecimiento_id",
 				"type": "varchar"
 			},
 			{
-				"name": "nro_control",
+				"name": "codigo_snis",
 				"type": "varchar"
 			},
 			{
-				"name": "fecha_control",
+				"name": "nombre",
 				"type": "varchar"
 			},
 			{
-				"name": "peso_nino_kg",
+				"name": "tipo",
 				"type": "varchar"
 			},
 			{
-				"name": "talla_nino_cm",
+				"name": "nivel_atencion",
+				"type": "varchar"
+			},
+			{
+				"name": "municipio",
+				"type": "varchar"
+			},
+			{
+				"name": "departamento",
+				"type": "varchar"
+			},
+			{
+				"name": "red_salud",
+				"type": "varchar"
+			},
+			{
+				"name": "estado",
 				"type": "varchar"
 			}
 		],
 		"typeProperties": {
 			"schema": "bronze",
-			"table": "bja_controles_pediatricos"
+			"table": "sup_establecimientos"
 		}
 	}
 }

@@ -1,52 +1,41 @@
 {
-	"name": "bjaControlesPediatricos_SQL",
+	"name": "supBoletasSQL",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_sql_dw_subsidios",
 			"type": "LinkedServiceReference"
 		},
-		"folder": {
-			"name": "datos bja"
-		},
 		"annotations": [],
 		"type": "AzureSqlTable",
 		"schema": [
 			{
-				"name": "control_pediatrico_id",
+				"name": "boleta_id",
 				"type": "varchar"
 			},
 			{
-				"name": "ci_nino",
+				"name": "control_id",
 				"type": "varchar"
 			},
 			{
-				"name": "ci_madre",
+				"name": "ci_beneficiaria",
 				"type": "varchar"
 			},
 			{
-				"name": "establecimiento_id",
+				"name": "nro_boleta",
 				"type": "varchar"
 			},
 			{
-				"name": "nro_control",
+				"name": "fecha_emision",
 				"type": "varchar"
 			},
 			{
-				"name": "fecha_control",
-				"type": "varchar"
-			},
-			{
-				"name": "peso_nino_kg",
-				"type": "varchar"
-			},
-			{
-				"name": "talla_nino_cm",
+				"name": "estado",
 				"type": "varchar"
 			}
 		],
 		"typeProperties": {
 			"schema": "bronze",
-			"table": "bja_controles_pediatricos"
+			"table": "sup_boletas"
 		}
 	}
 }
