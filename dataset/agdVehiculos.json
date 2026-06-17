@@ -1,0 +1,53 @@
+{
+	"name": "agdVehiculos",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_storage_subsidios",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "vehiculos.csv",
+				"folderPath": "agencia_distribuidora_sedem",
+				"fileSystem": "raw"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "vehiculo_id",
+				"type": "String"
+			},
+			{
+				"name": "transportista_id",
+				"type": "String"
+			},
+			{
+				"name": "descripcion",
+				"type": "String"
+			},
+			{
+				"name": "placa",
+				"type": "String"
+			},
+			{
+				"name": "tipo",
+				"type": "String"
+			},
+			{
+				"name": "capacidad_kg",
+				"type": "String"
+			},
+			{
+				"name": "estado",
+				"type": "String"
+			}
+		]
+	}
+}

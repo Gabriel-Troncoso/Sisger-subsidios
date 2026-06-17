@@ -1,0 +1,264 @@
+{
+	"name": "bronze_agencia_distribuidora",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "agdAlmacenes",
+						"type": "DatasetReference"
+					},
+					"name": "agdAlmacenes"
+				},
+				{
+					"dataset": {
+						"referenceName": "agdDespachos",
+						"type": "DatasetReference"
+					},
+					"name": "agdDespachos"
+				},
+				{
+					"dataset": {
+						"referenceName": "agdRecepciones",
+						"type": "DatasetReference"
+					},
+					"name": "agdRecepciones"
+				},
+				{
+					"dataset": {
+						"referenceName": "agdTransportistas",
+						"type": "DatasetReference"
+					},
+					"name": "agdTransportistas"
+				},
+				{
+					"dataset": {
+						"referenceName": "agdVehiculos",
+						"type": "DatasetReference"
+					},
+					"name": "agdVehiculos"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "agdAlmacenesSQL",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				},
+				{
+					"dataset": {
+						"referenceName": "agdDespachosSQL",
+						"type": "DatasetReference"
+					},
+					"name": "sink2"
+				},
+				{
+					"dataset": {
+						"referenceName": "agdRecepcionesSQL",
+						"type": "DatasetReference"
+					},
+					"name": "sink3"
+				},
+				{
+					"dataset": {
+						"referenceName": "agdTransportistasSQL",
+						"type": "DatasetReference"
+					},
+					"name": "sink4"
+				},
+				{
+					"dataset": {
+						"referenceName": "agdVehiculosSQL",
+						"type": "DatasetReference"
+					},
+					"name": "sink5"
+				}
+			],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          almacen_id as string,",
+				"          nombre as string,",
+				"          municipio as string,",
+				"          departamento as string,",
+				"          direccion as string,",
+				"          capacidad_m3 as string,",
+				"          estado as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> agdAlmacenes",
+				"source(output(",
+				"          despacho_id as string,",
+				"          recepcion_id as string,",
+				"          nro_lote as string,",
+				"          almacen_id as string,",
+				"          transportista_id as string,",
+				"          vehiculo_id as string,",
+				"          fecha_despacho as string,",
+				"          cantidad_despachada as string,",
+				"          centro_destino as string,",
+				"          estado as string,",
+				"          responsable as string,",
+				"          nro_guia_despacho as string,",
+				"          fecha_llegada as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> agdDespachos",
+				"source(output(",
+				"          recepcion_id as string,",
+				"          nro_lote as string,",
+				"          almacen_id as string,",
+				"          transportista_id as string,",
+				"          vehiculo_id as string,",
+				"          fecha_recepcion as string,",
+				"          cantidad_recibida as string,",
+				"          unidad as string,",
+				"          condicion as string,",
+				"          estado as string,",
+				"          responsable as string,",
+				"          nro_guia_remision as string,",
+				"          temperatura_llegada as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> agdRecepciones",
+				"source(output(",
+				"          transportista_id as string,",
+				"          razon_social as string,",
+				"          nit as string,",
+				"          municipio as string,",
+				"          contacto as string,",
+				"          telefono as string,",
+				"          estado as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> agdTransportistas",
+				"source(output(",
+				"          vehiculo_id as string,",
+				"          transportista_id as string,",
+				"          descripcion as string,",
+				"          placa as string,",
+				"          tipo as string,",
+				"          capacidad_kg as string,",
+				"          estado as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> agdVehiculos",
+				"agdAlmacenes sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          almacen_id as string,",
+				"          nombre as string,",
+				"          municipio as string,",
+				"          departamento as string,",
+				"          direccion as string,",
+				"          capacidad_m3 as string,",
+				"          estado as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1",
+				"agdDespachos sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          despacho_id as string,",
+				"          recepcion_id as string,",
+				"          nro_lote as string,",
+				"          almacen_id as string,",
+				"          transportista_id as string,",
+				"          vehiculo_id as string,",
+				"          fecha_despacho as string,",
+				"          cantidad_despachada as string,",
+				"          centro_destino as string,",
+				"          estado as string,",
+				"          responsable as string,",
+				"          nro_guia_despacho as string,",
+				"          fecha_llegada as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink2",
+				"agdRecepciones sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          recepcion_id as string,",
+				"          nro_lote as string,",
+				"          almacen_id as string,",
+				"          transportista_id as string,",
+				"          vehiculo_id as string,",
+				"          fecha_recepcion as string,",
+				"          cantidad_recibida as string,",
+				"          unidad as string,",
+				"          condicion as string,",
+				"          estado as string,",
+				"          responsable as string,",
+				"          nro_guia_remision as string,",
+				"          temperatura_llegada as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink3",
+				"agdTransportistas sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          transportista_id as string,",
+				"          razon_social as string,",
+				"          nit as string,",
+				"          municipio as string,",
+				"          contacto as string,",
+				"          telefono as string,",
+				"          estado as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink4",
+				"agdVehiculos sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          vehiculo_id as string,",
+				"          transportista_id as string,",
+				"          descripcion as string,",
+				"          placa as string,",
+				"          tipo as string,",
+				"          capacidad_kg as string,",
+				"          estado as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink5"
+			]
+		}
+	}
+}
