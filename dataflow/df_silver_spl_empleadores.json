@@ -1,0 +1,73 @@
+{
+	"name": "df_silver_spl_empleadores",
+	"properties": {
+		"folder": {
+			"name": "silver/silver_spl"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "bronze_spl_empleadores",
+						"type": "DatasetReference"
+					},
+					"name": "srcbronzesplempleadores"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "silver_spl_empleadores",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          empleador_id as string,",
+				"          nit as string,",
+				"          razon_social as string,",
+				"          tipo as string,",
+				"          nro_patronal as string,",
+				"          municipio as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcbronzesplempleadores",
+				"srcbronzesplempleadores derive(empleador_id = toInteger(trim(empleador_id)),",
+				"          nit = upper(trim(nit)),",
+				"          razon_social = initCap(lower(trim(razon_social))),",
+				"          tipo = initCap(lower(trim(tipo))),",
+				"          nro_patronal = upper(trim(nro_patronal)),",
+				"          municipio = initCap(lower(trim(municipio)))) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          empleador_id as integer,",
+				"          nit as string,",
+				"          razon_social as string,",
+				"          tipo as string,",
+				"          nro_patronal as string,",
+				"          municipio as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     preSQLs:['DELETE FROM silver.spl_empleadores;'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+			]
+		}
+	}
+}

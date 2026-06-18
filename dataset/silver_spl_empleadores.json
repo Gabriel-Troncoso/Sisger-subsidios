@@ -1,0 +1,42 @@
+{
+	"name": "silver_spl_empleadores",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sql_dw_subsidios",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "empleador_id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "nit",
+				"type": "varchar"
+			},
+			{
+				"name": "razon_social",
+				"type": "varchar"
+			},
+			{
+				"name": "tipo",
+				"type": "varchar"
+			},
+			{
+				"name": "nro_patronal",
+				"type": "varchar"
+			},
+			{
+				"name": "municipio",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "silver",
+			"table": "spl_empleadores"
+		}
+	}
+}

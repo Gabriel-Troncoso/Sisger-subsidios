@@ -1,0 +1,74 @@
+{
+	"name": "df_silver_bja_partos",
+	"properties": {
+		"folder": {
+			"name": "silver/silver_bja"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "bronze_bja_partos",
+						"type": "DatasetReference"
+					},
+					"name": "srcbronzebjapartos"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "silver_bja_partos",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          parto_id as string,",
+				"          ci_madre as string,",
+				"          ci_recien_nacido as string,",
+				"          establecimiento_id as string,",
+				"          fecha_parto as string,",
+				"          tipo_parto as string,",
+				"          peso_nacimiento_kg as string,",
+				"          talla_nacimiento_cm as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcbronzebjapartos",
+				"srcbronzebjapartos derive(tipo_parto = iif(regexMatch(lower(trim(tipo_parto)), `.*nat.*`), 'Natural', iif(regexMatch(lower(trim(tipo_parto)), `.*ces.*`), 'Cesárea', initCap(lower(trim(tipo_parto))) )),",
+				"          fecha_parto = coalesce(     toDate(fecha_parto, 'yyyy-MM-dd'),     toDate(fecha_parto, 'dd/MM/yyyy'),     toDate(fecha_parto, 'dd-MM-yyyy'),     toDate(fecha_parto, 'MM/dd/yyyy') ),",
+				"          talla_nacimiento_cm = toDecimal(replace(trim(talla_nacimiento_cm), ',', '.'), 10, 2)) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          parto_id as integer,",
+				"          ci_madre as string,",
+				"          ci_recien_nacido as string,",
+				"          establecimiento_id as integer,",
+				"          fecha_parto as date,",
+				"          tipo_parto as string,",
+				"          peso_nacimiento_kg as decimal(10,2),",
+				"          talla_nacimiento_cm as decimal(10,2)",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     preSQLs:['DELETE FROM silver.bja_partos;'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+			]
+		}
+	}
+}

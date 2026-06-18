@@ -1,0 +1,38 @@
+{
+	"name": "silver_spl_cajas",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sql_dw_subsidios",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Nombre",
+				"type": "varchar"
+			},
+			{
+				"name": "Sigla",
+				"type": "varchar"
+			},
+			{
+				"name": "Tipo",
+				"type": "varchar"
+			},
+			{
+				"name": "Estado",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "silver",
+			"table": "spl_cajas"
+		}
+	}
+}

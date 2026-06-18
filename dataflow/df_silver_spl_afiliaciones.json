@@ -1,0 +1,79 @@
+{
+	"name": "df_silver_spl_afiliaciones",
+	"properties": {
+		"folder": {
+			"name": "silver/silver_spl"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "bronze_spl_afiliaciones",
+						"type": "DatasetReference"
+					},
+					"name": "srcbronzesplafiliaciones"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "silver_spl_afiliaciones",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          afiliacion_id as string,",
+				"          ci_beneficiaria as string,",
+				"          empleador_id as string,",
+				"          caja_id as string,",
+				"          fecha_afiliacion as string,",
+				"          nro_matricula as string,",
+				"          tipo_subsidio as string,",
+				"          estado as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcbronzesplafiliaciones",
+				"srcbronzesplafiliaciones derive(afiliacion_id = toInteger(trim(afiliacion_id)),",
+				"          ci_beneficiaria = upper(trim(ci_beneficiaria)),",
+				"          empleador_id = toInteger(trim(empleador_id)),",
+				"          caja_id = toInteger(trim(caja_id)),",
+				"          fecha_afiliacion = coalesce(     toDate(fecha_afiliacion, 'yyyy-MM-dd'),     toDate(fecha_afiliacion, 'dd/MM/yyyy'),     toDate(fecha_afiliacion, 'dd-MM-yyyy'),     toDate(fecha_afiliacion, 'MM/dd/yyyy') ),",
+				"          nro_matricula = upper(trim(nro_matricula)),",
+				"          tipo_subsidio = initCap(lower(trim(tipo_subsidio))),",
+				"          estado = initCap(lower(trim(estado)))) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          afiliacion_id as integer,",
+				"          ci_beneficiaria as string,",
+				"          empleador_id as integer,",
+				"          caja_id as integer,",
+				"          fecha_afiliacion as date,",
+				"          nro_matricula as string,",
+				"          tipo_subsidio as string,",
+				"          estado as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     preSQLs:['DELETE FROM silver.spl_afiliaciones;'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+			]
+		}
+	}
+}

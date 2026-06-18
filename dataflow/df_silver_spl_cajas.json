@@ -1,0 +1,70 @@
+{
+	"name": "df_silver_spl_cajas",
+	"properties": {
+		"folder": {
+			"name": "silver/silver_spl"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "bronze_spl_cajas",
+						"type": "DatasetReference"
+					},
+					"name": "srcbronzesplcajas"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "silver_spl_cajas",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          ID as string,",
+				"          Nombre as string,",
+				"          Sigla as string,",
+				"          Tipo as string,",
+				"          Estado as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcbronzesplcajas",
+				"srcbronzesplcajas derive(ID = toInteger(trim(ID)),",
+				"          Nombre = initCap(lower(trim(Nombre))),",
+				"          Sigla = upper(trim(Sigla)),",
+				"          Tipo = initCap(lower(trim(Tipo))),",
+				"          Estado = initCap(lower(trim(Estado)))) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          ID as integer,",
+				"          Nombre as string,",
+				"          Sigla as string,",
+				"          Tipo as string,",
+				"          Estado as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     preSQLs:['DELETE FROM silver.spl_cajas;'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+			]
+		}
+	}
+}
