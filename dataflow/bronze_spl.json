@@ -1,6 +1,9 @@
 {
 	"name": "bronze_spl",
 	"properties": {
+		"folder": {
+			"name": "bronze"
+		},
 		"type": "MappingDataFlow",
 		"typeProperties": {
 			"sources": [

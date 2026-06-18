@@ -1,6 +1,9 @@
 {
 	"name": "bronze_segip",
 	"properties": {
+		"folder": {
+			"name": "bronze"
+		},
 		"type": "MappingDataFlow",
 		"typeProperties": {
 			"sources": [

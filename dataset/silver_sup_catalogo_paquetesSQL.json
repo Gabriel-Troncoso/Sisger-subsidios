@@ -1,0 +1,42 @@
+{
+	"name": "silver_sup_catalogo_paquetesSQL",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sql_dw_subsidios",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "paquete_id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "nombre",
+				"type": "varchar"
+			},
+			{
+				"name": "contenido",
+				"type": "varchar"
+			},
+			{
+				"name": "peso_estandar_kg",
+				"type": "decimal",
+				"precision": 10,
+				"scale": 2
+			},
+			{
+				"name": "costo_estimado_bs",
+				"type": "decimal",
+				"precision": 10,
+				"scale": 2
+			}
+		],
+		"typeProperties": {
+			"schema": "silver",
+			"table": "sup_catalogo_paquetes"
+		}
+	}
+}

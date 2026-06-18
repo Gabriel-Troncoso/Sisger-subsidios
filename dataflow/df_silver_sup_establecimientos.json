@@ -1,0 +1,80 @@
+{
+	"name": "df_silver_sup_establecimientos",
+	"properties": {
+		"folder": {
+			"name": "silver/silver_sup"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "bronze_sup_establecimientos",
+						"type": "DatasetReference"
+					},
+					"name": "srcbronzesupestablecimientos"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "silver_sup_establecimientoSQL",
+						"type": "DatasetReference"
+					},
+					"name": "sinksilversupestablecimientos"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          establecimiento_id as string,",
+				"          codigo_snis as string,",
+				"          nombre as string,",
+				"          tipo as string,",
+				"          nivel_atencion as string,",
+				"          municipio as string,",
+				"          departamento as string,",
+				"          red_salud as string,",
+				"          estado as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcbronzesupestablecimientos",
+				"srcbronzesupestablecimientos derive(establecimiento_id = toInteger(trim(establecimiento_id)),",
+				"          codigo_snis = upper(trim(codigo_snis)),",
+				"          nombre = initCap(lower(trim(nombre))),",
+				"          tipo = initCap(lower(trim(tipo))),",
+				"          nivel_atencion = initCap(lower(trim(nivel_atencion))),",
+				"          municipio = initCap(lower(trim(municipio))),",
+				"          red_salud = initCap(lower(trim(red_salud))),",
+				"          estado = initCap(lower(trim(estado)))) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          establecimiento_id as integer,",
+				"          codigo_snis as string,",
+				"          nombre as string,",
+				"          tipo as string,",
+				"          nivel_atencion as string,",
+				"          municipio as string,",
+				"          departamento as string,",
+				"          red_salud as string,",
+				"          estado as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sinksilversupestablecimientos"
+			]
+		}
+	}
+}

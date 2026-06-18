@@ -1,6 +1,9 @@
 {
 	"name": "bronze_agencia_distribuidora",
 	"properties": {
+		"folder": {
+			"name": "bronze"
+		},
 		"type": "MappingDataFlow",
 		"typeProperties": {
 			"sources": [

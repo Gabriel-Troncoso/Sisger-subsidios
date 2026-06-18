@@ -1,6 +1,9 @@
 {
 	"name": "bronze_bja",
 	"properties": {
+		"folder": {
+			"name": "bronze"
+		},
 		"type": "MappingDataFlow",
 		"typeProperties": {
 			"sources": [

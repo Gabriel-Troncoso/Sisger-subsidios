@@ -1,0 +1,90 @@
+{
+	"name": "df_silver_bja_establecimientos_salud",
+	"properties": {
+		"folder": {
+			"name": "silver/silver_bja"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "bronze_bja_establecimientos_salud",
+						"type": "DatasetReference"
+					},
+					"name": "srcbronzebjaestablecimientossalud"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "silver_bja_establecimientos_salud",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          establecimiento_id as string,",
+				"          codigo_snis as string,",
+				"          nombre as string,",
+				"          tipo as string,",
+				"          nivel_atencion as string,",
+				"          municipio as string,",
+				"          departamento as string,",
+				"          red_salud as string,",
+				"          estado as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcbronzebjaestablecimientossalud",
+				"srcbronzebjaestablecimientossalud derive(establecimiento_id = toInteger(trim(establecimiento_id)),",
+				"          codigo_snis = upper(trim(codigo_snis)),",
+				"          nombre = initCap(lower(trim(nombre))),",
+				"          tipo = initCap(lower(trim(tipo))),",
+				"          nivel_atencion = initCap(lower(trim(nivel_atencion))),",
+				"          municipio = initCap(lower(trim(municipio))),",
+				"          red_salud = initCap(lower(trim(red_salud))),",
+				"          estado = initCap(lower(trim(estado))),",
+				"          departamento = iif(lower(trim(departamento)) == 'la paz' || lower(trim(departamento)) == 'lp', 'LP',\r",
+				"iif(lower(trim(departamento)) == 'santa cruz' || lower(trim(departamento)) == 'sc', 'SC',\r",
+				"iif(lower(trim(departamento)) == 'cochabamba' || lower(trim(departamento)) == 'cb', 'CB',\r",
+				"iif(lower(trim(departamento)) == 'oruro' || lower(trim(departamento)) == 'or', 'OR',\r",
+				"iif(lower(trim(departamento)) == 'potosi' || lower(trim(departamento)) == 'potosí' || lower(trim(departamento)) == 'pt', 'PT',\r",
+				"iif(lower(trim(departamento)) == 'tarija' || lower(trim(departamento)) == 'tj', 'TJ',\r",
+				"iif(lower(trim(departamento)) == 'chuquisaca' || lower(trim(departamento)) == 'ch', 'CH',\r",
+				"iif(lower(trim(departamento)) == 'beni' || lower(trim(departamento)) == 'bn', 'BN',\r",
+				"iif(lower(trim(departamento)) == 'pando' || lower(trim(departamento)) == 'pd', 'PD',\r",
+				"'')))))))))) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          establecimiento_id as integer,",
+				"          codigo_snis as string,",
+				"          nombre as string,",
+				"          tipo as string,",
+				"          nivel_atencion as string,",
+				"          municipio as string,",
+				"          departamento as string,",
+				"          red_salud as string,",
+				"          estado as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+			]
+		}
+	}
+}
