@@ -1,0 +1,17 @@
+{
+	"name": "df_silver_agencia_almacenes",
+	"properties": {
+		"folder": {
+			"name": "silver/silver_agencia_sedem"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [],
+			"sinks": [],
+			"transformations": [],
+			"scriptLines": [
+				""
+			]
+		}
+	}
+}
