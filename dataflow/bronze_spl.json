@@ -58,10 +58,10 @@
 				},
 				{
 					"dataset": {
-						"referenceName": "splSubsidio",
+						"referenceName": "splSupermercados",
 						"type": "DatasetReference"
 					},
-					"name": "splSubsidios"
+					"name": "splSupermercados"
 				}
 			],
 			"sinks": [
@@ -116,7 +116,7 @@
 				},
 				{
 					"dataset": {
-						"referenceName": "splSubsidiosSQL",
+						"referenceName": "splSupermercadosSQL",
 						"type": "DatasetReference"
 					},
 					"name": "sink8"
@@ -219,7 +219,7 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> splSubsidios",
+				"     ignoreNoFilesFound: false) ~> splSupermercados",
 				"Splafiliaciones sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
@@ -354,7 +354,7 @@
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
 				"     errorHandlingOption: 'stopOnFirstError') ~> sink7",
-				"splSubsidios sink(allowSchemaDrift: true,",
+				"splSupermercados sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          ID as string,",
@@ -371,7 +371,15 @@
 				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError') ~> sink8"
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          ID,",
+				"          Cadena,",
+				"          Sucursal,",
+				"          Municipio,",
+				"          Direccion = {Dirección},",
+				"          Estado",
+				"     )) ~> sink8"
 			]
 		}
 	}

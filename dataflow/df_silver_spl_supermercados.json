@@ -1,0 +1,72 @@
+{
+	"name": "df_silver_spl_supermercados",
+	"properties": {
+		"folder": {
+			"name": "silver/silver_spl"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "bronze_spl_supermercados",
+						"type": "DatasetReference"
+					},
+					"name": "srcbronzesplsupermercado"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "silver_spl_supermercados",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          ID as string,",
+				"          Cadena as string,",
+				"          Sucursal as string,",
+				"          Municipio as string,",
+				"          Direccion as string,",
+				"          Estado as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcbronzesplsupermercado",
+				"srcbronzesplsupermercado derive(ID = toInteger(trim(ID)),",
+				"          Cadena = initCap(lower(trim(Cadena))),",
+				"          Sucursal = initCap(lower(trim(Sucursal))),",
+				"          Municipio = initCap(lower(trim(Municipio))),",
+				"          Direccion = initCap(lower(trim(Direccion))),",
+				"          Estado = initCap(lower(trim(Estado)))) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          ID as integer,",
+				"          Cadena as string,",
+				"          Sucursal as string,",
+				"          Municipio as string,",
+				"          Direccion as string,",
+				"          Estado as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+			]
+		}
+	}
+}

@@ -1,0 +1,79 @@
+{
+	"name": "df_silver_spl_asignaciones_mensuales",
+	"properties": {
+		"folder": {
+			"name": "silver/silver_spl"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "bronze_spl_asignaciones_mensuales",
+						"type": "DatasetReference"
+					},
+					"name": "srcbronzesplasignacionesmensuales"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "silver_spl_asignaciones_mensuales",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          asignacion_id as string,",
+				"          afiliacion_id as string,",
+				"          mes as string,",
+				"          gestion as string,",
+				"          monto_bs as string,",
+				"          monto_productos as string,",
+				"          monto_carnes as string,",
+				"          estado as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcbronzesplasignacionesmensuales",
+				"srcbronzesplasignacionesmensuales derive(asignacion_id = toInteger(trim(asignacion_id)),",
+				"          afiliacion_id = toInteger(trim(afiliacion_id)),",
+				"          mes = toInteger(trim(mes)),",
+				"          gestion =  toInteger(trim(gestion)),",
+				"          monto_bs = toDecimal(replace(trim(monto_bs), ',', '.'), 10, 2),",
+				"          monto_productos = toDecimal(replace(trim(monto_productos), ',', '.'), 10, 2),",
+				"          monto_carnes = toDecimal(replace(trim(monto_carnes), ',', '.'), 10, 2),",
+				"          estado = initCap(lower(trim(estado)))) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          asignacion_id as integer,",
+				"          afiliacion_id as integer,",
+				"          mes as integer,",
+				"          gestion as integer,",
+				"          monto_bs as decimal(10,2),",
+				"          monto_productos as decimal(10,2),",
+				"          monto_carnes as decimal(10,2),",
+				"          estado as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     preSQLs:['DELETE FROM silver.spl_asignaciones_mensuales;'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+			]
+		}
+	}
+}
