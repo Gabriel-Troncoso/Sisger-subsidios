@@ -1,0 +1,93 @@
+{
+	"name": "df_silver_agencia_recepciones",
+	"properties": {
+		"folder": {
+			"name": "silver/silver_agencia_sedem"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "bronze_agencia_recepciones",
+						"type": "DatasetReference"
+					},
+					"name": "srcbronzeagenciarecepciones"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "silver_agencia_recepciones",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          recepcion_id as string,",
+				"          nro_lote as string,",
+				"          almacen_id as string,",
+				"          transportista_id as string,",
+				"          vehiculo_id as string,",
+				"          fecha_recepcion as string,",
+				"          cantidad_recibida as string,",
+				"          unidad as string,",
+				"          condicion as string,",
+				"          estado as string,",
+				"          responsable as string,",
+				"          nro_guia_remision as string,",
+				"          temperatura_llegada as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcbronzeagenciarecepciones",
+				"srcbronzeagenciarecepciones derive(recepcion_id = toInteger(trim(recepcion_id)),",
+				"          nro_lote = upper(trim(nro_lote)),",
+				"          almacen_id = toInteger(trim(almacen_id)),",
+				"          transportista_id = toInteger(trim(transportista_id)),",
+				"          vehiculo_id = toInteger(trim(vehiculo_id)),",
+				"          fecha_recepcion = coalesce(     toDate(fecha_recepcion, 'yyyy-MM-dd'),     toDate(fecha_recepcion, 'dd/MM/yyyy'),     toDate(fecha_recepcion, 'dd-MM-yyyy'),     toDate(fecha_recepcion, 'MM/dd/yyyy') ),",
+				"          cantidad_recibida = toDecimal(replace(trim(cantidad_recibida), ',', '.'), 10, 2),",
+				"          unidad = upper(trim(unidad)),",
+				"          condicion = initCap(lower(trim(condicion))),",
+				"          estado = initCap(lower(trim(estado))),",
+				"          responsable = initCap(lower(trim(responsable))),",
+				"          nro_guia_remision = upper(trim(nro_guia_remision)),",
+				"          temperatura_llegada = toDecimal(replace(trim(temperatura_llegada), ',', '.'), 10, 2)) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          recepcion_id as integer,",
+				"          nro_lote as string,",
+				"          almacen_id as integer,",
+				"          transportista_id as integer,",
+				"          vehiculo_id as integer,",
+				"          fecha_recepcion as date,",
+				"          cantidad_recibida as decimal(10,2),",
+				"          unidad as string,",
+				"          condicion as string,",
+				"          estado as string,",
+				"          responsable as string,",
+				"          nro_guia_remision as string,",
+				"          temperatura_llegada as decimal(10,2)",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+			]
+		}
+	}
+}

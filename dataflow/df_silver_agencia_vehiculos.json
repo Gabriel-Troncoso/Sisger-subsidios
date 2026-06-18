@@ -1,0 +1,75 @@
+{
+	"name": "df_silver_agencia_vehiculos",
+	"properties": {
+		"folder": {
+			"name": "silver/silver_agencia_sedem"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "bronze_agencia_vehiculos",
+						"type": "DatasetReference"
+					},
+					"name": "srcbronzeagenciavehiculos"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "silver_agencia_vehiculos",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          vehiculo_id as string,",
+				"          transportista_id as string,",
+				"          descripcion as string,",
+				"          placa as string,",
+				"          tipo as string,",
+				"          capacidad_kg as string,",
+				"          estado as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcbronzeagenciavehiculos",
+				"srcbronzeagenciavehiculos derive(vehiculo_id = toInteger(trim(vehiculo_id)),",
+				"          transportista_id = toInteger(trim(transportista_id)),",
+				"          descripcion = initCap(lower(trim(descripcion))),",
+				"          placa = upper(trim(placa)),",
+				"          tipo = initCap(lower(trim(tipo))),",
+				"          capacidad_kg = toDecimal(replace(trim(capacidad_kg), ',', '.'), 10, 2),",
+				"          estado = initCap(lower(trim(estado)))) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          vehiculo_id as integer,",
+				"          transportista_id as integer,",
+				"          descripcion as string,",
+				"          placa as string,",
+				"          tipo as string,",
+				"          capacidad_kg as decimal(10,2),",
+				"          estado as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+			]
+		}
+	}
+}

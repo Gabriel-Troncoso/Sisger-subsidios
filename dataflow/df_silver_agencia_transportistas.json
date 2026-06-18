@@ -1,5 +1,5 @@
 {
-	"name": "df_silver_agencia_almacenes",
+	"name": "df_silver_agencia_transportistas",
 	"properties": {
 		"folder": {
 			"name": "silver/silver_agencia_sedem"
@@ -9,16 +9,16 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "bronze_agencia_almacenes",
+						"referenceName": "bronze_agencia_transportistas",
 						"type": "DatasetReference"
 					},
-					"name": "srcbronzeagenciaalmacenes"
+					"name": "srcbronzeagenciatransportistas"
 				}
 			],
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "silver_agencia_almacenes",
+						"referenceName": "silver_agencia_transportistas",
 						"type": "DatasetReference"
 					},
 					"name": "sink1"
@@ -31,34 +31,34 @@
 			],
 			"scriptLines": [
 				"source(output(",
-				"          almacen_id as string,",
-				"          nombre as string,",
+				"          transportista_id as string,",
+				"          razon_social as string,",
+				"          nit as string,",
 				"          municipio as string,",
-				"          departamento as string,",
-				"          direccion as string,",
-				"          capacidad_m3 as string,",
+				"          contacto as string,",
+				"          telefono as string,",
 				"          estado as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     format: 'table') ~> srcbronzeagenciaalmacenes",
-				"srcbronzeagenciaalmacenes derive(almacen_id = toInteger(trim(almacen_id)),",
-				"          nombre = initCap(lower(trim(nombre))),",
+				"     format: 'table') ~> srcbronzeagenciatransportistas",
+				"srcbronzeagenciatransportistas derive(transportista_id = toInteger(trim(transportista_id)),",
+				"          razon_social = initCap(lower(trim(razon_social))),",
+				"          nit =  upper(trim(nit)),",
 				"          municipio = initCap(lower(trim(municipio))),",
-				"          departamento = initCap(lower(trim(departamento))),",
-				"          direccion = initCap(lower(trim(direccion))),",
-				"          capacidad_m3 = toDecimal(replace(trim(capacidad_m3), ',', '.'), 10, 2),",
+				"          contacto = initCap(lower(trim(contacto))),",
+				"          telefono = trim(telefono),",
 				"          estado = initCap(lower(trim(estado)))) ~> derivedColumn1",
 				"derivedColumn1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
-				"          almacen_id as integer,",
-				"          nombre as string,",
+				"          transportista_id as integer,",
+				"          razon_social as string,",
+				"          nit as string,",
 				"          municipio as string,",
-				"          departamento as string,",
-				"          direccion as string,",
-				"          capacidad_m3 as decimal(10,2),",
+				"          contacto as string,",
+				"          telefono as string,",
 				"          estado as string",
 				"     ),",
 				"     deletable:false,",
@@ -66,7 +66,7 @@
 				"     updateable:false,",
 				"     upsertable:false,",
 				"     format: 'table',",
-				"     preSQLs:['DELETE FROM silver.agencia_almacenes;'],",
+				"     preSQLs:['DELETE FROM silver.agencia_transportistas;'],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
 				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
