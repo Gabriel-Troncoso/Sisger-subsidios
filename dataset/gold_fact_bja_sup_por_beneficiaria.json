@@ -1,0 +1,81 @@
+{
+	"name": "gold_fact_bja_sup_por_beneficiaria",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sql_dw_subsidios",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "fact_key",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "persona_key",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "ci_beneficiaria",
+				"type": "varchar"
+			},
+			{
+				"name": "total_controles_bja",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "total_pagado_bja",
+				"type": "decimal",
+				"precision": 10,
+				"scale": 2
+			},
+			{
+				"name": "total_pagos_bja",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "total_controles_sup",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "total_entregas_sup",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "total_peso_entregado_sup",
+				"type": "decimal",
+				"precision": 10,
+				"scale": 2
+			},
+			{
+				"name": "total_costo_estimado_sup",
+				"type": "decimal",
+				"precision": 10,
+				"scale": 2
+			},
+			{
+				"name": "tiene_bja",
+				"type": "varchar"
+			},
+			{
+				"name": "tiene_sup",
+				"type": "varchar"
+			},
+			{
+				"name": "sistema_origen",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "gold",
+			"table": "fact_bja_sup_por_beneficiaria"
+		}
+	}
+}

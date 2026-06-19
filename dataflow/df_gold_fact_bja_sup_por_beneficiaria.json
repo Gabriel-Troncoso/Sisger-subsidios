@@ -36,7 +36,15 @@
 					"name": "srcsupentregas"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "gold_fact_bja_sup_por_beneficiaria",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
 			"transformations": [
 				{
 					"name": "aggbjacontroles"
@@ -176,7 +184,32 @@
 				"          sistema_origen",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select1"
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          fact_key as integer,",
+				"          persona_key as integer,",
+				"          ci_beneficiaria as string,",
+				"          total_controles_bja as integer,",
+				"          total_pagado_bja as decimal(10,2),",
+				"          total_pagos_bja as integer,",
+				"          total_controles_sup as integer,",
+				"          total_entregas_sup as integer,",
+				"          total_peso_entregado_sup as decimal(10,2),",
+				"          total_costo_estimado_sup as decimal(10,2),",
+				"          tiene_bja as string,",
+				"          tiene_sup as string,",
+				"          sistema_origen as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
 			]
 		}
 	}
