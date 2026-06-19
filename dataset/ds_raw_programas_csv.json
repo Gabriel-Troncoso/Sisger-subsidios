@@ -1,0 +1,37 @@
+{
+	"name": "ds_raw_programas_csv",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_storage_subsidios",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "programas.csv",
+				"folderPath": "catalogos",
+				"fileSystem": "raw"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "codigo_programa",
+				"type": "String"
+			},
+			{
+				"name": "nombre_programa",
+				"type": "String"
+			},
+			{
+				"name": "tipo_beneficio",
+				"type": "String"
+			}
+		]
+	}
+}
