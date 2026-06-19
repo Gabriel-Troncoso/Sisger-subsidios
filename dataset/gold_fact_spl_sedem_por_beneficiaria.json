@@ -1,0 +1,98 @@
+{
+	"name": "gold_fact_spl_sedem_por_beneficiaria",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sql_dw_subsidios",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "fact_key",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "ci_beneficiaria",
+				"type": "varchar"
+			},
+			{
+				"name": "total_afiliaciones_spl",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "total_asignaciones_spl",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "total_monto_asignado_bs",
+				"type": "decimal",
+				"precision": 10,
+				"scale": 2
+			},
+			{
+				"name": "total_monto_productos_bs",
+				"type": "decimal",
+				"precision": 10,
+				"scale": 2
+			},
+			{
+				"name": "total_monto_carnes_bs",
+				"type": "decimal",
+				"precision": 10,
+				"scale": 2
+			},
+			{
+				"name": "total_entregas_agencia",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "total_peso_agencia_kg",
+				"type": "decimal",
+				"precision": 10,
+				"scale": 2
+			},
+			{
+				"name": "total_entregas_supermercado",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "total_cantidad_carne_kg",
+				"type": "decimal",
+				"precision": 10,
+				"scale": 2
+			},
+			{
+				"name": "total_monto_supermercado_bs",
+				"type": "decimal",
+				"precision": 10,
+				"scale": 2
+			},
+			{
+				"name": "tiene_spl",
+				"type": "varchar"
+			},
+			{
+				"name": "tiene_entrega_agencia",
+				"type": "varchar"
+			},
+			{
+				"name": "tiene_entrega_supermercado",
+				"type": "varchar"
+			},
+			{
+				"name": "sistema_origen",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "gold",
+			"table": "fact_spl_sedem_por_beneficiaria"
+		}
+	}
+}

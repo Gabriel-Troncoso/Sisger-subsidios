@@ -1,0 +1,290 @@
+{
+	"name": "df_gold_fact_spl_sedem_por_beneficiaria",
+	"properties": {
+		"folder": {
+			"name": "gold"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "silver_spl_afiliaciones",
+						"type": "DatasetReference"
+					},
+					"name": "srcsplafiliaciones"
+				},
+				{
+					"dataset": {
+						"referenceName": "silver_spl_asignaciones_mensuales",
+						"type": "DatasetReference"
+					},
+					"name": "srcsplasignaciones"
+				},
+				{
+					"dataset": {
+						"referenceName": "silver_spl_afiliaciones",
+						"type": "DatasetReference"
+					},
+					"name": "srcsplafiliacionesasig"
+				},
+				{
+					"dataset": {
+						"referenceName": "silver_spl_entregas_agencia",
+						"type": "DatasetReference"
+					},
+					"name": "srcsplentregasagencia"
+				},
+				{
+					"dataset": {
+						"referenceName": "silver_spl_entregas_supermercado",
+						"type": "DatasetReference"
+					},
+					"name": "srcsplentregassupermercado"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "gold_fact_spl_sedem_por_beneficiaria",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "aggsplafiliaciones"
+				},
+				{
+					"name": "joinasignacionesafiliaciones"
+				},
+				{
+					"name": "aggsplasignaciones"
+				},
+				{
+					"name": "aggsplentregasagencia"
+				},
+				{
+					"name": "aggsplentregassupermercado"
+				},
+				{
+					"name": "joinsplbase"
+				},
+				{
+					"name": "derivedcisplbase"
+				},
+				{
+					"name": "joinsplagencia"
+				},
+				{
+					"name": "derivedcisplagencia"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "select2"
+				},
+				{
+					"name": "joinsplsupermercado"
+				},
+				{
+					"name": "derivedsplsedemfinal"
+				},
+				{
+					"name": "derivedcijoin"
+				},
+				{
+					"name": "selectfactsplsedem"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          afiliacion_id as integer,",
+				"          ci_beneficiaria as string,",
+				"          empleador_id as integer,",
+				"          caja_id as integer,",
+				"          fecha_afiliacion as date,",
+				"          nro_matricula as string,",
+				"          tipo_subsidio as string,",
+				"          estado as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcsplafiliaciones",
+				"source(output(",
+				"          asignacion_id as integer,",
+				"          afiliacion_id as integer,",
+				"          mes as integer,",
+				"          gestion as integer,",
+				"          monto_bs as decimal(10,2),",
+				"          monto_productos as decimal(10,2),",
+				"          monto_carnes as decimal(10,2),",
+				"          estado as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcsplasignaciones",
+				"source(output(",
+				"          afiliacion_id as integer,",
+				"          ci_beneficiaria as string,",
+				"          empleador_id as integer,",
+				"          caja_id as integer,",
+				"          fecha_afiliacion as date,",
+				"          nro_matricula as string,",
+				"          tipo_subsidio as string,",
+				"          estado as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcsplafiliacionesasig",
+				"source(output(",
+				"          entrega_agencia_id as integer,",
+				"          asignacion_id as integer,",
+				"          ci_beneficiaria as string,",
+				"          fecha_entrega as date,",
+				"          productos as string,",
+				"          lote as string,",
+				"          peso_kg as decimal(10,2),",
+				"          punto_entrega as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcsplentregasagencia",
+				"source(output(",
+				"          entrega_super_id as integer,",
+				"          asignacion_id as integer,",
+				"          ci_beneficiaria as string,",
+				"          supermercado_id as integer,",
+				"          fecha_retiro as date,",
+				"          tipo_carne as string,",
+				"          cantidad_kg as decimal(10,2),",
+				"          monto_bs as decimal(10,2)",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcsplentregassupermercado",
+				"srcsplafiliaciones aggregate(groupBy(ci_beneficiaria),",
+				"     total_afiliaciones_spl = count(afiliacion_id)) ~> aggsplafiliaciones",
+				"srcsplasignaciones, srcsplafiliacionesasig join(srcsplasignaciones@afiliacion_id == srcsplafiliacionesasig@afiliacion_id,",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> joinasignacionesafiliaciones",
+				"joinasignacionesafiliaciones aggregate(groupBy(ci_beneficiaria),",
+				"     total_asignaciones_spl = count(asignacion_id),",
+				"          total_monto_asignado_bs = sum(monto_bs),",
+				"          total_monto_productos_bs = sum(monto_productos),",
+				"          total_monto_carnes_bs = sum(monto_carnes)) ~> aggsplasignaciones",
+				"srcsplentregasagencia aggregate(groupBy(ci_beneficiaria),",
+				"     total_entregas_agencia = count(entrega_agencia_id),",
+				"          total_peso_agencia_kg = sum(peso_kg)) ~> aggsplentregasagencia",
+				"srcsplentregassupermercado aggregate(groupBy(ci_beneficiaria),",
+				"     total_entregas_supermercado = count(entrega_super_id),",
+				"          total_cantidad_carne_kg = sum(cantidad_kg),",
+				"          total_monto_supermercado_bs = sum(monto_bs)) ~> aggsplentregassupermercado",
+				"select1, select2 join(ci_afiliacion == ci_asignacion,",
+				"     joinType:'outer',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> joinsplbase",
+				"joinsplbase derive({ci_spl } =  coalesce(ci_afiliacion, ci_asignacion)) ~> derivedcisplbase",
+				"derivedcisplbase, aggsplentregasagencia join({ci_spl } == ci_beneficiaria,",
+				"     joinType:'outer',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> joinsplagencia",
+				"joinsplagencia derive(ci_spl_2 = coalesce({ci_spl }, ci_beneficiaria)) ~> derivedcisplagencia",
+				"aggsplafiliaciones select(mapColumn(",
+				"          ci_afiliacion = ci_beneficiaria,",
+				"          total_afiliaciones_spl",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"aggsplasignaciones select(mapColumn(",
+				"          ci_asignacion = ci_beneficiaria,",
+				"          total_asignaciones_spl,",
+				"          total_monto_asignado_bs,",
+				"          total_monto_productos_bs,",
+				"          total_monto_carnes_bs",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select2",
+				"derivedcisplagencia, aggsplentregassupermercado join(ci_spl_2 == aggsplentregassupermercado@ci_beneficiaria,",
+				"     joinType:'outer',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> joinsplsupermercado",
+				"joinsplsupermercado derive(ci_beneficiaria = coalesce(ci_spl_2, aggsplentregassupermercado@ci_beneficiaria),",
+				"          total_afiliaciones_spl_final =  iif(isNull(total_afiliaciones_spl), toLong(0), total_afiliaciones_spl),",
+				"          total_asignaciones_spl_final = iif(isNull(total_asignaciones_spl), toLong(0), total_asignaciones_spl),",
+				"          total_monto_asignado_bs_final = iif(isNull(total_monto_asignado_bs), toDecimal(0), total_monto_asignado_bs),",
+				"          total_monto_productos_bs_final = iif(isNull(total_monto_productos_bs), toDecimal(0), total_monto_productos_bs),",
+				"          total_monto_carnes_bs_final = iif(isNull(total_monto_carnes_bs), toDecimal(0), total_monto_carnes_bs),",
+				"          total_peso_agencia_kg_final = iif(isNull(total_peso_agencia_kg), toDecimal(0), total_peso_agencia_kg),",
+				"          total_entregas_supermercado_final = iif(isNull(total_entregas_supermercado), toLong(0), total_entregas_supermercado),",
+				"          total_cantidad_carne_kg_final = iif(isNull(total_cantidad_carne_kg), toDecimal(0), total_cantidad_carne_kg),",
+				"          total_monto_supermercado_bs_final = iif(isNull(total_monto_supermercado_bs), toDecimal(0), total_monto_supermercado_bs),",
+				"          tiene_spl = iif(total_afiliaciones_spl > 0 || total_asignaciones_spl > 0, 'SI', 'NO'),",
+				"          {tiene_entrega_agencia } = iif(total_entregas_agencia > 0, 'SI', 'NO'),",
+				"          tiene_entrega_supermercadocolumna1 = iif(total_entregas_supermercado > 0, 'SI', 'NO'),",
+				"          total_entregas_agencia_final = iif(isNull(total_entregas_agencia), toLong(0), total_entregas_agencia),",
+				"          {sistema_origen } = 'SPL_SEDEM',",
+				"          tiene_entrega_agencia = iif(total_entregas_agencia > 0, 'SI', 'NO')) ~> derivedsplsedemfinal",
+				"derivedsplsedemfinal derive(ci_join = upper(trim(toString(ci_beneficiaria)))) ~> derivedcijoin",
+				"derivedcijoin select(mapColumn(",
+				"          total_afiliaciones_spl,",
+				"          total_asignaciones_spl,",
+				"          total_monto_asignado_bs,",
+				"          total_monto_productos_bs,",
+				"          ci_beneficiaria,",
+				"          total_entregas_agencia,",
+				"          total_peso_agencia_kg,",
+				"          total_entregas_supermercado,",
+				"          total_cantidad_carne_kg,",
+				"          total_monto_supermercado_bs = total_monto_supermercado_bs_final,",
+				"          tiene_spl,",
+				"          {tiene_entrega_agencia },",
+				"          tiene_entrega_supermercado = tiene_entrega_supermercadocolumna1,",
+				"          {sistema_origen }",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectfactsplsedem",
+				"selectfactsplsedem sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          fact_key as integer,",
+				"          ci_beneficiaria as string,",
+				"          total_afiliaciones_spl as integer,",
+				"          total_asignaciones_spl as integer,",
+				"          total_monto_asignado_bs as decimal(10,2),",
+				"          total_monto_productos_bs as decimal(10,2),",
+				"          total_monto_carnes_bs as decimal(10,2),",
+				"          total_entregas_agencia as integer,",
+				"          total_peso_agencia_kg as decimal(10,2),",
+				"          total_entregas_supermercado as integer,",
+				"          total_cantidad_carne_kg as decimal(10,2),",
+				"          total_monto_supermercado_bs as decimal(10,2),",
+				"          tiene_spl as string,",
+				"          tiene_entrega_agencia as string,",
+				"          tiene_entrega_supermercado as string,",
+				"          sistema_origen as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+			]
+		}
+	}
+}
