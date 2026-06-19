@@ -1,0 +1,34 @@
+{
+	"name": "golddim_programa",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sql_dw_subsidios",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "programa_key",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "codigo_programa",
+				"type": "varchar"
+			},
+			{
+				"name": "nombre_programa",
+				"type": "varchar"
+			},
+			{
+				"name": "tipo_beneficio",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "gold",
+			"table": "dim_programa"
+		}
+	}
+}
