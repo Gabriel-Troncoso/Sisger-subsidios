@@ -55,5 +55,6 @@
 			"schema": "silver",
 			"table": "bja_controles_prenatales"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

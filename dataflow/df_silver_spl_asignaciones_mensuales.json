@@ -47,7 +47,7 @@
 				"srcbronzesplasignacionesmensuales derive(asignacion_id = toInteger(trim(asignacion_id)),",
 				"          afiliacion_id = toInteger(trim(afiliacion_id)),",
 				"          mes = toInteger(trim(mes)),",
-				"          gestion =  toInteger(trim(gestion)),",
+				"          gestion = toInteger(trim(gestion)),",
 				"          monto_bs = toDecimal(replace(trim(monto_bs), ',', '.'), 10, 2),",
 				"          monto_productos = toDecimal(replace(trim(monto_productos), ',', '.'), 10, 2),",
 				"          monto_carnes = toDecimal(replace(trim(monto_carnes), ',', '.'), 10, 2),",

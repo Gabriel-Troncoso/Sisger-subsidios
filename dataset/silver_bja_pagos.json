@@ -48,5 +48,6 @@
 			"schema": "silver",
 			"table": "bja_pagos"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

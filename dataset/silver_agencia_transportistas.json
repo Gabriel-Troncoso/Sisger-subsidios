@@ -42,5 +42,6 @@
 			"schema": "silver",
 			"table": "agencia_transportistas"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

@@ -39,5 +39,6 @@
 			"schema": "silver",
 			"table": "sup_boletas"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

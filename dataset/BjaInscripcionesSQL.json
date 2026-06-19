@@ -40,5 +40,6 @@
 			"schema": "bronze",
 			"table": "bja_inscripciones"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

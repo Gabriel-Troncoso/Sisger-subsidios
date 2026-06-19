@@ -49,7 +49,7 @@
 				"          ci_beneficiaria = upper(trim(ci_beneficiaria)),",
 				"          establecimiento_id = toInteger(trim(establecimiento_id)),",
 				"          nro_control = toInteger(trim(nro_control)),",
-				"          fecha_control =  coalesce(     toDate(fecha_control, 'yyyy-MM-dd'),     toDate(fecha_control, 'dd/MM/yyyy'),     toDate(fecha_control, 'dd-MM-yyyy'),     toDate(fecha_control, 'MM/dd/yyyy') ),",
+				"          fecha_control = coalesce(     toDate(fecha_control, 'yyyy-MM-dd'),     toDate(fecha_control, 'dd/MM/yyyy'),     toDate(fecha_control, 'dd-MM-yyyy'),     toDate(fecha_control, 'MM/dd/yyyy') ),",
 				"          semana_gestacion = toInteger(trim(semana_gestacion)),",
 				"          peso_madre_kg = toDecimal(replace(trim(peso_madre_kg), ',', '.'), 10, 2),",
 				"          presion_arterial = upper(trim(presion_arterial)),",

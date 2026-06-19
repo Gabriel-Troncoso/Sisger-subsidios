@@ -33,5 +33,6 @@
 			"schema": "bronze",
 			"table": "sup_catalogo_paquetes"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

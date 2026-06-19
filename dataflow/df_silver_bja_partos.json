@@ -67,7 +67,17 @@
 				"     preSQLs:['DELETE FROM silver.bja_partos;'],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          parto_id,",
+				"          ci_madre,",
+				"          ci_recien_nacido,",
+				"          establecimiento_id,",
+				"          fecha_parto,",
+				"          tipo_parto,",
+				"          peso_nacimiento_kg,",
+				"          talla_nacimiento_cm",
+				"     )) ~> sink1"
 			]
 		}
 	}

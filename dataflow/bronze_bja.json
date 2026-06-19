@@ -44,7 +44,7 @@
 				},
 				{
 					"dataset": {
-						"referenceName": "bjaEstablecimientoSalud",
+						"referenceName": "bjaEstablecimientoSalud2",
 						"type": "DatasetReference"
 					},
 					"name": "bjaEstablecimientoSalud"

@@ -1,5 +1,5 @@
 {
-	"name": "agdRecepciones",
+	"name": "bjaEstablecimientoSalud2",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_storage_subsidios",
@@ -10,8 +10,8 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "recepciones.csv",
-				"folderPath": "agencia_distribuidora_sedem",
+				"fileName": "bja_establecimientos_salud.csv",
+				"folderPath": "bono_juana_azurduy",
 				"fileSystem": "raw"
 			},
 			"columnDelimiter": ",",
@@ -21,55 +21,39 @@
 		},
 		"schema": [
 			{
-				"name": "recepcion_id",
+				"name": "establecimiento_id",
 				"type": "String"
 			},
 			{
-				"name": "nro_lote",
+				"name": "codigo_snis",
 				"type": "String"
 			},
 			{
-				"name": "almacen_id",
+				"name": "nombre",
 				"type": "String"
 			},
 			{
-				"name": "transportista_id",
+				"name": "tipo",
 				"type": "String"
 			},
 			{
-				"name": "vehiculo_id",
+				"name": "nivel_atencion",
 				"type": "String"
 			},
 			{
-				"name": "fecha_recepcion",
+				"name": "municipio",
 				"type": "String"
 			},
 			{
-				"name": "cantidad_recibida",
+				"name": "departamento",
 				"type": "String"
 			},
 			{
-				"name": "unidad",
-				"type": "String"
-			},
-			{
-				"name": "condicion",
+				"name": "red_salud",
 				"type": "String"
 			},
 			{
 				"name": "estado",
-				"type": "String"
-			},
-			{
-				"name": "responsable",
-				"type": "String"
-			},
-			{
-				"name": "nro_guia_remision",
-				"type": "String"
-			},
-			{
-				"name": "temperatura_llegada",
 				"type": "String"
 			}
 		]

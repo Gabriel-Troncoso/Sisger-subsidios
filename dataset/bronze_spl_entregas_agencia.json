@@ -45,5 +45,6 @@
 			"schema": "bronze",
 			"table": "spl_entregas_agencia"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

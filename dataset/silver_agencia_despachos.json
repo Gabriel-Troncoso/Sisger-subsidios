@@ -72,5 +72,6 @@
 			"schema": "silver",
 			"table": "agencia_despachos"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

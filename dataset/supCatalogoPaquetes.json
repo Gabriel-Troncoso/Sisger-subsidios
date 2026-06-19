@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "catalogo-paquetes.csv",
+				"fileName": "sup_catalogo-paquetes.csv",
 				"folderPath": "subsidio_universal_prenatal",
 				"fileSystem": "raw"
 			},
@@ -41,5 +41,6 @@
 				"type": "String"
 			}
 		]
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

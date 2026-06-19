@@ -55,7 +55,7 @@
 				"          fecha_entrega = coalesce(     toDate(fecha_entrega, 'yyyy-MM-dd'),     toDate(fecha_entrega, 'dd/MM/yyyy'),     toDate(fecha_entrega, 'dd-MM-yyyy'),     toDate(fecha_entrega, 'MM/dd/yyyy') ),",
 				"          lote_produccion = upper(trim(lote_produccion)),",
 				"          peso_paquete_kg = toDecimal(replace(trim(peso_paquete_kg), ',', '.'), 10, 2),",
-				"          fecha_proxima_entrega =  coalesce(     toDate(fecha_proxima_entrega, 'yyyy-MM-dd'),     toDate(fecha_proxima_entrega, 'dd/MM/yyyy'),     toDate(fecha_proxima_entrega, 'dd-MM-yyyy'),     toDate(fecha_proxima_entrega, 'MM/dd/yyyy') )) ~> derivedColumn1",
+				"          fecha_proxima_entrega = coalesce(     toDate(fecha_proxima_entrega, 'yyyy-MM-dd'),     toDate(fecha_proxima_entrega, 'dd/MM/yyyy'),     toDate(fecha_proxima_entrega, 'dd-MM-yyyy'),     toDate(fecha_proxima_entrega, 'MM/dd/yyyy') )) ~> derivedColumn1",
 				"derivedColumn1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",

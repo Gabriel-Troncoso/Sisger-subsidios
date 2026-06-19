@@ -78,5 +78,6 @@
 			"schema": "silver",
 			"table": "segip_personas"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

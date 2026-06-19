@@ -44,5 +44,6 @@
 			"schema": "silver",
 			"table": "spl_certificados_medicos"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

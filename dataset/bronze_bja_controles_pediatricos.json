@@ -45,5 +45,6 @@
 			"schema": "bronze",
 			"table": "bja_controles_pediatricos"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

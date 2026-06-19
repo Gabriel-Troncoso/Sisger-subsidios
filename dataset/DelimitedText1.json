@@ -5,6 +5,9 @@
 			"referenceName": "ls_storage_subsidios",
 			"type": "LinkedServiceReference"
 		},
+		"folder": {
+			"name": "datos bja"
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {

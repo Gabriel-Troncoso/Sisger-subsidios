@@ -44,5 +44,6 @@
 			"schema": "silver",
 			"table": "agencia_almacenes"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

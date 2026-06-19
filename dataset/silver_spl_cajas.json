@@ -34,5 +34,6 @@
 			"schema": "silver",
 			"table": "spl_cajas"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

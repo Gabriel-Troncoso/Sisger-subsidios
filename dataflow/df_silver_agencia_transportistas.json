@@ -45,7 +45,7 @@
 				"     format: 'table') ~> srcbronzeagenciatransportistas",
 				"srcbronzeagenciatransportistas derive(transportista_id = toInteger(trim(transportista_id)),",
 				"          razon_social = initCap(lower(trim(razon_social))),",
-				"          nit =  upper(trim(nit)),",
+				"          nit = upper(trim(nit)),",
 				"          municipio = initCap(lower(trim(municipio))),",
 				"          contacto = initCap(lower(trim(contacto))),",
 				"          telefono = trim(telefono),",

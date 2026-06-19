@@ -1,9 +1,9 @@
 {
-	"name": "pip_bronze_sup",
+	"name": "pip_silver_segip",
 	"properties": {
 		"activities": [
 			{
-				"name": "pip_sup",
+				"name": "Data flow1",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "bronze_sup",
+						"referenceName": "df_silver_segip_personas",
 						"type": "DataFlowReference"
 					},
 					"compute": {
@@ -28,7 +28,7 @@
 			}
 		],
 		"annotations": [],
-		"lastPublishTime": "2026-06-19T02:59:26Z"
+		"lastPublishTime": "2026-06-19T04:13:10Z"
 	},
 	"type": "Microsoft.DataFactory/factories/pipelines"
 }

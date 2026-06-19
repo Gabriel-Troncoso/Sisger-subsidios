@@ -37,5 +37,6 @@
 			"schema": "bronze",
 			"table": "sup_boletas"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }
