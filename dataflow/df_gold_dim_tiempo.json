@@ -1,0 +1,341 @@
+{
+	"name": "df_gold_dim_tiempo",
+	"properties": {
+		"folder": {
+			"name": "gold"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "silver_bja_pagos",
+						"type": "DatasetReference"
+					},
+					"name": "srcbjapagos"
+				},
+				{
+					"dataset": {
+						"referenceName": "silver_sup_entregas",
+						"type": "DatasetReference"
+					},
+					"name": "srcsupentregas"
+				},
+				{
+					"dataset": {
+						"referenceName": "silver_sup_controlesSQL",
+						"type": "DatasetReference"
+					},
+					"name": "srcsupcontroles"
+				},
+				{
+					"dataset": {
+						"referenceName": "silver_bja_controles_prenatales",
+						"type": "DatasetReference"
+					},
+					"name": "srcbjaprenatales"
+				},
+				{
+					"dataset": {
+						"referenceName": "silver_bja_controles_pediatricos",
+						"type": "DatasetReference"
+					},
+					"name": "srcbjapediatricos"
+				},
+				{
+					"dataset": {
+						"referenceName": "silver_spl_entregas_agencia",
+						"type": "DatasetReference"
+					},
+					"name": "srcsplentregasagencia"
+				},
+				{
+					"dataset": {
+						"referenceName": "silver_spl_entregas_supermercado",
+						"type": "DatasetReference"
+					},
+					"name": "srcsplentregassuper"
+				},
+				{
+					"dataset": {
+						"referenceName": "silver_agencia_recepciones",
+						"type": "DatasetReference"
+					},
+					"name": "srcagenciarecepciones"
+				},
+				{
+					"dataset": {
+						"referenceName": "silver_agencia_despachos",
+						"type": "DatasetReference"
+					},
+					"name": "srcagenciadespachos"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "gold_dim_tiempo",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "select1"
+				},
+				{
+					"name": "select2"
+				},
+				{
+					"name": "select3"
+				},
+				{
+					"name": "select4"
+				},
+				{
+					"name": "select5"
+				},
+				{
+					"name": "select6"
+				},
+				{
+					"name": "select7"
+				},
+				{
+					"name": "select8"
+				},
+				{
+					"name": "select9"
+				},
+				{
+					"name": "union1"
+				},
+				{
+					"name": "filter1"
+				},
+				{
+					"name": "aggregate1"
+				},
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          pago_id as integer,",
+				"          ci_beneficiaria as string,",
+				"          concepto_pago as string,",
+				"          monto_bs as decimal(10,2),",
+				"          fecha_pago as date,",
+				"          estado_pago as string,",
+				"          canal_pago as string,",
+				"          nro_comprobante as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcbjapagos",
+				"source(output(",
+				"          entrega_id as integer,",
+				"          boleta_id as integer,",
+				"          ci_beneficiaria as string,",
+				"          establecimiento_id as integer,",
+				"          paquete_id as integer,",
+				"          paquete_nombre as string,",
+				"          fecha_entrega as date,",
+				"          lote_produccion as string,",
+				"          peso_paquete_kg as decimal(10,2),",
+				"          fecha_proxima_entrega as date",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcsupentregas",
+				"source(output(",
+				"          control_id as integer,",
+				"          ci_beneficiaria as string,",
+				"          establecimiento_id as integer,",
+				"          nro_control as integer,",
+				"          fecha_control as date,",
+				"          semana_gestacion as integer,",
+				"          peso_madre_kg as decimal(10,2),",
+				"          presion_arterial as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcsupcontroles",
+				"source(output(",
+				"          control_prenatal_id as integer,",
+				"          ci_beneficiaria as string,",
+				"          establecimiento_id as integer,",
+				"          nro_control as integer,",
+				"          fecha_control as date,",
+				"          semana_gestacion as integer,",
+				"          peso_madre_kg as decimal(10,2),",
+				"          presion_arterial as string,",
+				"          resultado as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcbjaprenatales",
+				"source(output(",
+				"          control_pediatrico_id as integer,",
+				"          ci_nino as string,",
+				"          ci_madre as string,",
+				"          establecimiento_id as integer,",
+				"          nro_control as integer,",
+				"          fecha_control as date,",
+				"          peso_nino_kg as decimal(10,2),",
+				"          talla_nino_cm as decimal(10,2)",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcbjapediatricos",
+				"source(output(",
+				"          entrega_agencia_id as integer,",
+				"          asignacion_id as integer,",
+				"          ci_beneficiaria as string,",
+				"          fecha_entrega as date,",
+				"          productos as string,",
+				"          lote as string,",
+				"          peso_kg as decimal(10,2),",
+				"          punto_entrega as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcsplentregasagencia",
+				"source(output(",
+				"          entrega_super_id as integer,",
+				"          asignacion_id as integer,",
+				"          ci_beneficiaria as string,",
+				"          supermercado_id as integer,",
+				"          fecha_retiro as date,",
+				"          tipo_carne as string,",
+				"          cantidad_kg as decimal(10,2),",
+				"          monto_bs as decimal(10,2)",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcsplentregassuper",
+				"source(output(",
+				"          recepcion_id as integer,",
+				"          nro_lote as string,",
+				"          almacen_id as integer,",
+				"          transportista_id as integer,",
+				"          vehiculo_id as integer,",
+				"          fecha_recepcion as date,",
+				"          cantidad_recibida as decimal(10,2),",
+				"          unidad as string,",
+				"          condicion as string,",
+				"          estado as string,",
+				"          responsable as string,",
+				"          nro_guia_remision as string,",
+				"          temperatura_llegada as decimal(10,2)",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcagenciarecepciones",
+				"source(output(",
+				"          despacho_id as integer,",
+				"          recepcion_id as integer,",
+				"          nro_lote as string,",
+				"          almacen_id as integer,",
+				"          transportista_id as integer,",
+				"          vehiculo_id as integer,",
+				"          fecha_despacho as date,",
+				"          cantidad_despachada as decimal(10,2),",
+				"          centro_destino as string,",
+				"          estado as string,",
+				"          responsable as string,",
+				"          nro_guia_despacho as string,",
+				"          fecha_llegada as date",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcagenciadespachos",
+				"srcbjapagos select(mapColumn(",
+				"          fecha = fecha_pago",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"srcsupentregas select(mapColumn(",
+				"          fecha = fecha_entrega",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select2",
+				"srcsupcontroles select(mapColumn(",
+				"          fecha = fecha_control",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select3",
+				"srcbjaprenatales select(mapColumn(",
+				"          fecha = fecha_control",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select4",
+				"srcbjapediatricos select(mapColumn(",
+				"          fecha = fecha_control",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select5",
+				"srcsplentregasagencia select(mapColumn(",
+				"          fecha = fecha_entrega",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select6",
+				"srcsplentregassuper select(mapColumn(",
+				"          fecha = fecha_retiro",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select7",
+				"srcagenciarecepciones select(mapColumn(",
+				"          fecha = fecha_recepcion",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select8",
+				"srcagenciadespachos select(mapColumn(",
+				"          fecha = fecha_despacho",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select9",
+				"select1, select2, select3, select4, select5, select6, select7, select8, select9 union(byName: true)~> union1",
+				"union1 filter(!isNull(fecha)) ~> filter1",
+				"filter1 aggregate(groupBy(fecha),",
+				"     total = count()) ~> aggregate1",
+				"aggregate1 derive(fecha_key = toInteger(toString(fecha, 'yyyyMMdd')),",
+				"          anio = year(fecha),",
+				"          mes = month(fecha),",
+				"          nombre_mes = toString(fecha, 'MMMM'),",
+				"          trimestre = iif(month(fecha) <= 3, 1, iif(month(fecha) <= 6, 2, iif(month(fecha) <= 9, 3, 4))),",
+				"          semestre = iif(month(fecha) <= 6, 1, 2)) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          fecha_key as integer,",
+				"          fecha as date,",
+				"          anio as integer,",
+				"          mes as integer,",
+				"          nombre_mes as string,",
+				"          trimestre as integer,",
+				"          semestre as integer",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+			]
+		}
+	}
+}

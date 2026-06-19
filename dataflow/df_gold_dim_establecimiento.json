@@ -97,7 +97,18 @@
 				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          establecimiento_id,",
+				"          nombre,",
+				"          tipo,",
+				"          nivel_atencion,",
+				"          municipio,",
+				"          departamento,",
+				"          red_salud,",
+				"          estado,",
+				"          sistema_origen",
+				"     )) ~> sink1"
 			]
 		}
 	}
