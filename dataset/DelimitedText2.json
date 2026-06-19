@@ -5,16 +5,13 @@
 			"referenceName": "ls_storage_subsidios",
 			"type": "LinkedServiceReference"
 		},
-		"folder": {
-			"name": "datos bja"
-		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "bja_controles_pediatricos.csv",
-				"folderPath": "bono_juana_azurduy",
+				"fileName": "segip_personas.csv",
+				"folderPath": "segip",
 				"fileSystem": "raw"
 			},
 			"columnDelimiter": ",",
@@ -24,11 +21,43 @@
 		},
 		"schema": [
 			{
-				"name": "control_pediatrico_id",
+				"name": "ci",
 				"type": "String"
 			},
 			{
-				"name": "ci_nino",
+				"name": "nombres",
+				"type": "String"
+			},
+			{
+				"name": "apellido_paterno",
+				"type": "String"
+			},
+			{
+				"name": "apellido_materno",
+				"type": "String"
+			},
+			{
+				"name": "fecha_nacimiento",
+				"type": "String"
+			},
+			{
+				"name": "genero",
+				"type": "String"
+			},
+			{
+				"name": "estado_civil",
+				"type": "String"
+			},
+			{
+				"name": "ci_conyuge",
+				"type": "String"
+			},
+			{
+				"name": "numero_hijos",
+				"type": "String"
+			},
+			{
+				"name": "ci_padre",
 				"type": "String"
 			},
 			{
@@ -36,33 +65,22 @@
 				"type": "String"
 			},
 			{
-				"name": "establecimiento_id",
+				"name": "profesion",
 				"type": "String"
 			},
 			{
-				"name": "nro_control",
+				"name": "nivel_estudios",
 				"type": "String"
 			},
 			{
-				"name": "fecha_control",
+				"name": "municipio_residencia",
 				"type": "String"
 			},
 			{
-				"name": "peso_nino_kg",
-				"type": "String"
-			},
-			{
-				"name": "talla_nino_cm",
-				"type": "String"
-			},
-			{
-				"name": "vacuna_aplicada",
-				"type": "String"
-			},
-			{
-				"name": "resultado",
+				"name": "fecha_emision",
 				"type": "String"
 			}
 		]
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }
