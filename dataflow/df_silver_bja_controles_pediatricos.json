@@ -45,7 +45,7 @@
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> srcbronzebjacontrolespediatricos",
 				"srcbronzebjacontrolespediatricos derive(control_pediatrico_id = toInteger(trim(control_pediatrico_id)),",
-				"          ci_nino = upper(trim(ci_nino)),",
+				"          ci_nino = concat(   regexReplace(regexExtract(trim(ci_nino), `([\\d-]+)`, 1), `-`, ''),   iif(     regexMatch(upper(trim(ci_nino)), `.*(LP|SC|CB|OR|PT|TJ|CH|BN|PD).*`),     regexExtract(upper(trim(ci_nino)), `(LP|SC|CB|OR|PT|TJ|CH|BN|PD)`, 1),     'SINDPT'   ) ),",
 				"          ci_madre = upper(trim(ci_madre)),",
 				"          establecimiento_id = toInteger(trim(establecimiento_id)),",
 				"          nro_control = toInteger(trim(nro_control)),",

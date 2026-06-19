@@ -1,0 +1,354 @@
+{
+	"name": "df_gold_fact_materno_infantil_bja_sup",
+	"properties": {
+		"folder": {
+			"name": "gold"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "silver_bja_controles_prenatales",
+						"type": "DatasetReference"
+					},
+					"name": "srcbjaprenatales"
+				},
+				{
+					"dataset": {
+						"referenceName": "silver_bja_pagos",
+						"type": "DatasetReference"
+					},
+					"name": "srcbjapagos"
+				},
+				{
+					"dataset": {
+						"referenceName": "silver_sup_controlesSQL",
+						"type": "DatasetReference"
+					},
+					"name": "srcsupcontroles"
+				},
+				{
+					"dataset": {
+						"referenceName": "silver_sup_entregas",
+						"type": "DatasetReference"
+					},
+					"name": "srcsupentregas"
+				},
+				{
+					"dataset": {
+						"referenceName": "silver_sup_catalogo_paquetesSQL",
+						"type": "DatasetReference"
+					},
+					"name": "srcsupcatalogopaquetes"
+				},
+				{
+					"dataset": {
+						"referenceName": "gold_dim_persona",
+						"type": "DatasetReference"
+					},
+					"name": "srcgolddimpersona"
+				},
+				{
+					"dataset": {
+						"referenceName": "gold_dim_establecimiento",
+						"type": "DatasetReference"
+					},
+					"name": "srcgolddimestablecimiento"
+				},
+				{
+					"dataset": {
+						"referenceName": "gold_dim_tiempo",
+						"type": "DatasetReference"
+					},
+					"name": "srcgolddimtiempo"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "joinprenatalespagos"
+				},
+				{
+					"name": "join2"
+				},
+				{
+					"name": "selectprenatalas"
+				},
+				{
+					"name": "selectpagos"
+				},
+				{
+					"name": "selectcontroles"
+				},
+				{
+					"name": "selectentregas"
+				},
+				{
+					"name": "join3"
+				},
+				{
+					"name": "joinsupPaquetes"
+				},
+				{
+					"name": "joindimpersona"
+				},
+				{
+					"name": "joindimestablecimiento"
+				},
+				{
+					"name": "derivedColumnFechaFact"
+				},
+				{
+					"name": "joindimtiempo"
+				},
+				{
+					"name": "derivedconstantes"
+				},
+				{
+					"name": "selectfactmaterno"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          control_prenatal_id as integer,",
+				"          ci_beneficiaria as string,",
+				"          establecimiento_id as integer,",
+				"          nro_control as integer,",
+				"          fecha_control as date,",
+				"          semana_gestacion as integer,",
+				"          peso_madre_kg as decimal(10,2),",
+				"          presion_arterial as string,",
+				"          resultado as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcbjaprenatales",
+				"source(output(",
+				"          pago_id as integer,",
+				"          ci_beneficiaria as string,",
+				"          concepto_pago as string,",
+				"          monto_bs as decimal(10,2),",
+				"          fecha_pago as date,",
+				"          estado_pago as string,",
+				"          canal_pago as string,",
+				"          nro_comprobante as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcbjapagos",
+				"source(output(",
+				"          control_id as integer,",
+				"          ci_beneficiaria as string,",
+				"          establecimiento_id as integer,",
+				"          nro_control as integer,",
+				"          fecha_control as date,",
+				"          semana_gestacion as integer,",
+				"          peso_madre_kg as decimal(10,2),",
+				"          presion_arterial as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcsupcontroles",
+				"source(output(",
+				"          entrega_id as integer,",
+				"          boleta_id as integer,",
+				"          ci_beneficiaria as string,",
+				"          establecimiento_id as integer,",
+				"          paquete_id as integer,",
+				"          paquete_nombre as string,",
+				"          fecha_entrega as date,",
+				"          lote_produccion as string,",
+				"          peso_paquete_kg as decimal(10,2),",
+				"          fecha_proxima_entrega as date",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcsupentregas",
+				"source(output(",
+				"          paquete_id as integer,",
+				"          nombre as string,",
+				"          contenido as string,",
+				"          peso_estandar_kg as decimal(10,2),",
+				"          costo_estimado_bs as decimal(10,2)",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcsupcatalogopaquetes",
+				"source(output(",
+				"          persona_key as integer,",
+				"          ci as string,",
+				"          nombres as string,",
+				"          apellido_paterno as string,",
+				"          apellido_materno as string,",
+				"          nombre_completo as string,",
+				"          fecha_nacimiento as date,",
+				"          genero as string,",
+				"          estado_civil as string,",
+				"          numero_hijos as integer,",
+				"          profesion as string,",
+				"          municipio_residencia as string,",
+				"          nivel_estudios as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcgolddimpersona",
+				"source(output(",
+				"          establecimiento_key as integer,",
+				"          establecimiento_id as integer,",
+				"          nombre as string,",
+				"          tipo as string,",
+				"          nivel_atencion as string,",
+				"          municipio as string,",
+				"          departamento as string,",
+				"          red_salud as string,",
+				"          estado as string,",
+				"          sistema_origen as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcgolddimestablecimiento",
+				"source(output(",
+				"          fecha_key as integer,",
+				"          fecha as date,",
+				"          anio as integer,",
+				"          mes as integer,",
+				"          nombre_mes as string,",
+				"          trimestre as integer,",
+				"          semestre as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcgolddimtiempo",
+				"selectprenatalas, selectpagos join(ci_beneficiaria_prenatales == ci_beneficiaria_pago,",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> joinprenatalespagos",
+				"joinprenatalespagos, selectcontroles join(ci_beneficiaria_pago == ci_beneficiaria_controles,",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join2",
+				"srcbjaprenatales select(mapColumn(",
+				"          control_prenatal_id,",
+				"          ci_beneficiaria_prenatales = ci_beneficiaria,",
+				"          establecimiento_id_bja = establecimiento_id,",
+				"          nro_control,",
+				"          fecha_control,",
+				"          semana_gestacion,",
+				"          peso_madre_kg,",
+				"          presion_arterial,",
+				"          resultado",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectprenatalas",
+				"srcbjapagos select(mapColumn(",
+				"          pago_id,",
+				"          ci_beneficiaria_pago = ci_beneficiaria,",
+				"          concepto_pago,",
+				"          monto_bs,",
+				"          fecha_pago,",
+				"          estado_pago,",
+				"          canal_pago,",
+				"          nro_comprobante",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectpagos",
+				"srcsupcontroles select(mapColumn(",
+				"          control_id,",
+				"          ci_beneficiaria_controles = ci_beneficiaria,",
+				"          establecimiento_id,",
+				"          nro_control,",
+				"          fecha_control,",
+				"          semana_gestacion,",
+				"          peso_madre_kg,",
+				"          presion_arterial",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectcontroles",
+				"srcsupentregas select(mapColumn(",
+				"          entrega_id,",
+				"          boleta_id,",
+				"          ci_beneficiaria_entregas = ci_beneficiaria,",
+				"          establecimiento_id,",
+				"          paquete_id_entregas = paquete_id,",
+				"          paquete_nombre,",
+				"          fecha_entrega,",
+				"          lote_produccion,",
+				"          peso_paquete_kg,",
+				"          fecha_proxima_entrega",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectentregas",
+				"join2, selectentregas join(ci_beneficiaria_prenatales == ci_beneficiaria_entregas,",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join3",
+				"join3, srcsupcatalogopaquetes join(paquete_id_entregas == paquete_id,",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> joinsupPaquetes",
+				"joinsupPaquetes, srcgolddimpersona join(ci_beneficiaria_prenatales == ci,",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> joindimpersona",
+				"joindimpersona, srcgolddimestablecimiento join(establecimiento_id_bja == srcgolddimestablecimiento@establecimiento_id,",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> joindimestablecimiento",
+				"joindimestablecimiento derive(fecha_principal = coalesce(fecha_pago, fecha_entrega, selectprenatalas@fecha_control, selectcontroles@fecha_control)) ~> derivedColumnFechaFact",
+				"derivedColumnFechaFact, srcgolddimtiempo join(fecha_principal == fecha,",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> joindimtiempo",
+				"joindimtiempo derive(programa_principal = 'BJA_SUP',",
+				"          sistema_origen = 'BJA_SUP') ~> derivedconstantes",
+				"derivedconstantes select(mapColumn(",
+				"          persona_key,",
+				"          establecimiento_key,",
+				"          fecha_key,",
+				"          ci_beneficiaria = ci_beneficiaria_prenatales,",
+				"          programa_principal,",
+				"          control_bja_id = control_prenatal_id,",
+				"          control_sup_id = control_id,",
+				"          nro_control_bja = selectprenatalas@nro_control,",
+				"          nro_control_sup = selectcontroles@nro_control,",
+				"          semana_gestacion_bja = selectprenatalas@semana_gestacion,",
+				"          semana_gestacion_sup = selectcontroles@semana_gestacion,",
+				"          peso_madre_bja_kg = selectprenatalas@peso_madre_kg,",
+				"          peso_madre_sup_kg = selectcontroles@peso_madre_kg,",
+				"          presion_bja = selectprenatalas@presion_arterial,",
+				"          presion_sup = selectcontroles@presion_arterial,",
+				"          monto_pagado_bja = monto_bs,",
+				"          estado_pago_bja = estado_pago,",
+				"          canal_pago_bja = canal_pago,",
+				"          entrega_sup_id = entrega_id,",
+				"          paquete_nombre,",
+				"          peso_paquete_kg,",
+				"          costo_estimado_bs,",
+				"          fecha_control_bja = selectprenatalas@fecha_control,",
+				"          fecha_control_sup = selectcontroles@fecha_control,",
+				"          fecha_pago_bja = fecha_pago,",
+				"          fecha_entrega_sup = fecha_entrega,",
+				"          sistema_origen",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectfactmaterno"
+			]
+		}
+	}
+}

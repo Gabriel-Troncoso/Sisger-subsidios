@@ -1,0 +1,183 @@
+{
+	"name": "df_gold_fact_bja_sup_por_beneficiaria",
+	"properties": {
+		"folder": {
+			"name": "gold"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "silver_bja_controles_prenatales",
+						"type": "DatasetReference"
+					},
+					"name": "srcbjacontroles"
+				},
+				{
+					"dataset": {
+						"referenceName": "silver_bja_pagos",
+						"type": "DatasetReference"
+					},
+					"name": "srcbjapagos"
+				},
+				{
+					"dataset": {
+						"referenceName": "silver_sup_controlesSQL",
+						"type": "DatasetReference"
+					},
+					"name": "srcsupcontroles"
+				},
+				{
+					"dataset": {
+						"referenceName": "silver_sup_entregas",
+						"type": "DatasetReference"
+					},
+					"name": "srcsupentregas"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "aggbjacontroles"
+				},
+				{
+					"name": "aggbjapagos"
+				},
+				{
+					"name": "joinbjaresumen"
+				},
+				{
+					"name": "aggsupcontroles"
+				},
+				{
+					"name": "aggsupentregas"
+				},
+				{
+					"name": "joinsupresumen"
+				},
+				{
+					"name": "joinbjasup"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "select1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          control_prenatal_id as integer,",
+				"          ci_beneficiaria as string,",
+				"          establecimiento_id as integer,",
+				"          nro_control as integer,",
+				"          fecha_control as date,",
+				"          semana_gestacion as integer,",
+				"          peso_madre_kg as decimal(10,2),",
+				"          presion_arterial as string,",
+				"          resultado as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcbjacontroles",
+				"source(output(",
+				"          pago_id as integer,",
+				"          ci_beneficiaria as string,",
+				"          concepto_pago as string,",
+				"          monto_bs as decimal(10,2),",
+				"          fecha_pago as date,",
+				"          estado_pago as string,",
+				"          canal_pago as string,",
+				"          nro_comprobante as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcbjapagos",
+				"source(output(",
+				"          control_id as integer,",
+				"          ci_beneficiaria as string,",
+				"          establecimiento_id as integer,",
+				"          nro_control as integer,",
+				"          fecha_control as date,",
+				"          semana_gestacion as integer,",
+				"          peso_madre_kg as decimal(10,2),",
+				"          presion_arterial as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcsupcontroles",
+				"source(output(",
+				"          entrega_id as integer,",
+				"          boleta_id as integer,",
+				"          ci_beneficiaria as string,",
+				"          establecimiento_id as integer,",
+				"          paquete_id as integer,",
+				"          paquete_nombre as string,",
+				"          fecha_entrega as date,",
+				"          lote_produccion as string,",
+				"          peso_paquete_kg as decimal(10,2),",
+				"          fecha_proxima_entrega as date",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcsupentregas",
+				"srcbjacontroles aggregate(groupBy(ci_beneficiaria),",
+				"     total_controles_bja = count(control_prenatal_id)) ~> aggbjacontroles",
+				"srcbjapagos aggregate(groupBy(ci_beneficiaria),",
+				"     total_pagos_bja = count(pago_id),",
+				"          total_pagado_bja = sum(monto_bs)) ~> aggbjapagos",
+				"aggbjacontroles, aggbjapagos join(aggbjacontroles@ci_beneficiaria == aggbjapagos@ci_beneficiaria,",
+				"     joinType:'outer',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> joinbjaresumen",
+				"srcsupcontroles aggregate(groupBy(ci_beneficiaria),",
+				"     total_controles_sup = count(control_id)) ~> aggsupcontroles",
+				"srcsupentregas aggregate(groupBy(ci_beneficiaria),",
+				"     total_entregas_sup = count(entrega_id),",
+				"          total_peso_entregado_sup = sum(peso_paquete_kg)) ~> aggsupentregas",
+				"aggsupcontroles, aggsupentregas join(aggsupcontroles@ci_beneficiaria == aggsupentregas@ci_beneficiaria,",
+				"     joinType:'outer',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> joinsupresumen",
+				"joinbjaresumen, joinsupresumen join(aggbjacontroles@ci_beneficiaria == aggsupcontroles@ci_beneficiaria,",
+				"     joinType:'outer',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> joinbjasup",
+				"joinbjasup derive(ci_beneficiaria = coalesce(aggbjacontroles@ci_beneficiaria, aggbjapagos@ci_beneficiaria, aggsupcontroles@ci_beneficiaria, aggsupentregas@ci_beneficiaria),",
+				"          total_controles_bja = iif(isNull(total_controles_bja), toLong(0), total_controles_bja),",
+				"          total_pagos_bja = iif(isNull(total_pagos_bja), toLong(0), total_pagos_bja),",
+				"          total_pagado_bja = iif(isNull(total_pagado_bja), toDecimal(0), total_pagado_bja),",
+				"          total_controles_sup = iif(isNull(total_controles_sup), toLong(0), total_controles_sup),",
+				"          total_entregas_sup = iif(isNull(total_entregas_sup), toLong(0), total_entregas_sup),",
+				"          total_peso_entregado_sup = iif(isNull(total_peso_entregado_sup), toDecimal(0), total_peso_entregado_sup),",
+				"          total_costo_estimado_sup = toDecimal(0),",
+				"          tiene_bja = iif(isNull(aggbjacontroles@ci_beneficiaria) && isNull(aggbjapagos@ci_beneficiaria), 'NO', 'SI'),",
+				"          tiene_sup = iif(isNull(aggsupcontroles@ci_beneficiaria) && isNull(aggsupentregas@ci_beneficiaria), 'NO', 'SI'),",
+				"          sistema_origen = 'BJA_SUP') ~> derivedColumn1",
+				"derivedColumn1 select(mapColumn(",
+				"          ci_beneficiaria,",
+				"          total_controles_bja,",
+				"          total_pagos_bja,",
+				"          total_pagado_bja,",
+				"          total_controles_sup,",
+				"          total_entregas_sup,",
+				"          total_peso_entregado_sup,",
+				"          total_costo_estimado_sup,",
+				"          tiene_bja,",
+				"          tiene_sup,",
+				"          sistema_origen",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1"
+			]
+		}
+	}
+}
